@@ -1,0 +1,6 @@
+streamlit
+pandas
+pymongo
+numpy
+smartsheet-python-sdk
+firebase-admin
