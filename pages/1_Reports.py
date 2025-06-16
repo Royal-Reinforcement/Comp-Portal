@@ -187,7 +187,6 @@ if st.session_state['valid_session']:
                     df         = pd.DataFrame(result)
                     df['Date'] = pd.to_datetime(df['Date']).dt.normalize()
                     df['Date'] = pd.to_datetime(df['Date']).dt.date
-                    df         = df[df.Cost_to_Guest != 0]
                     df         = df.groupby(['Date','Season','Unit','Comp'])[['Total_Rate','Service_Fee','Cost_to_Guest']].agg(
                         Total_Rate = ('Total_Rate', np.average),
                         Service_Fee = ('Service_Fee', np.average),
