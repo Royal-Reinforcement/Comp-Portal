@@ -232,16 +232,16 @@ if st.session_state['valid_session']:
                 # query_one    = collection.where(filter=FieldFilter('Date','in',dates)).stream()
 
                 query_one = collection.where(filter=And([
-                        FieldFilter('Date','==',date_str),
-                        FieldFilter('Cost_to_Guest','==', 0)
+                    FieldFilter('Date','==',date_str),
+                    FieldFilter('Cost_to_Guest','==', 0)
                     ])).stream()
 
                 result_one   = [item.to_dict() for item in query_one]
                 sdf          = pd.DataFrame(result_one)
 
                 query_two    = collection.where(filter=And([
-                        FieldFilter('Date','==',prior_str),
-                        FieldFilter('Cost_to_Guest','!=', 0)
+                    FieldFilter('Date','==',prior_str),
+                    FieldFilter('Cost_to_Guest','!=', 0)
                     ])).stream()
                 
                 result_rwo   = [item.to_dict() for item in query_one]
@@ -259,7 +259,12 @@ if st.session_state['valid_session']:
             
 
             case '🕵️ Unit Comp Query':
-                query            = collection.where(filter=And([FieldFilter('Unit','==',unit),FieldFilter('Dates','==',week)])).stream()
+
+                query            = collection.where(filter=And([
+                    FieldFilter('Unit','==',unit),
+                    FieldFilter('Dates','==',week)
+                    ])).stream()
+                
                 result           = [item.to_dict() for item in query]
                 df               = pd.DataFrame(result)
 
