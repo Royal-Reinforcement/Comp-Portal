@@ -198,19 +198,23 @@ if st.session_state['valid_session']:
 
             case '🏠 Unit Summary':
                 if date_range is not None:
-                    query      = collection.where(filter=FieldFilter('Date','in',date_range)).stream()
+
+                    query = collection.where(filter=And([
+                        FieldFilter('Date','in',date_range),
+                        FieldFilter('Cost_to_Guest','!=', 0)
+                    ])).stream()
+
                     result     = [item.to_dict() for item in query]
                     df         = pd.DataFrame(result)
                     df['Date'] = pd.to_datetime(df['Date']).dt.normalize()
                     df['Date'] = pd.to_datetime(df['Date']).dt.date
-                    df         = df[df.Cost_to_Guest != 0]
                     df         = df.groupby(['Date','Season','Unit','Comp'])[['Total_Rate','Service_Fee','Cost_to_Guest']].agg(
                         Total_Rate = ('Total_Rate', np.average),
                         Service_Fee = ('Service_Fee', np.average),
                         Cost_to_Guest = ('Cost_to_Guest', np.average),
                         Count = ('Total_Rate','size')
                     )
-                    df        = df.groupby(['Date','Season','Unit'])[['Total_Rate','Service_Fee','Cost_to_Guest']].agg(
+                    df         = df.groupby(['Date','Season','Unit'])[['Total_Rate','Service_Fee','Cost_to_Guest']].agg(
                         Total_Rate = ('Total_Rate', np.average),
                         Service_Fee = ('Service_Fee', np.average),
                         Cost_to_Guest = ('Cost_to_Guest', np.average),
