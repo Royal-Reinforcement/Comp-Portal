@@ -229,15 +229,23 @@ if st.session_state['valid_session']:
                 prior_str    = prior_date.strftime('%Y-%m-%d')
                 dates        = [date_str, prior_str]
 
-                query        = collection.where(filter=FieldFilter('Date','in',dates)).stream()
-                result       = [item.to_dict() for item in query]
-                df           = pd.DataFrame(result)
+                # query_one    = collection.where(filter=FieldFilter('Date','in',dates)).stream()
 
-                sdf          = df[df['Date'] == date_str]
-                pdf          = df[df['Date'] == prior_str]
+                query_one = collection.where(filter=And([
+                        FieldFilter('Date','==',date_str),
+                        FieldFilter('Cost_to_Guest','==', 0)
+                    ])).stream()
 
-                sdf          = sdf[sdf.Cost_to_Guest == 0]
-                pdf          = pdf[pdf.Cost_to_Guest != 0]
+                result_one   = [item.to_dict() for item in query_one]
+                sdf          = pd.DataFrame(result_one)
+
+                query_two    = collection.where(filter=And([
+                        FieldFilter('Date','==',prior_str),
+                        FieldFilter('Cost_to_Guest','!=', 0)
+                    ])).stream()
+                
+                result_rwo   = [item.to_dict() for item in query_one]
+                pdf          = pd.DataFrame(result_rwo)
 
                 df           = pd.merge(sdf, pdf, on=['Unit','Comp','Dates'], how='left', suffixes=('_s','_p'))
                 df           = df[df.Cost_to_Guest_p.notnull()]
