@@ -55,6 +55,7 @@ def get_date(column):
 
 
 
+
 if 'valid_session' not in st.session_state: st.session_state['valid_session'] = False
 
 display = st.empty()
@@ -133,21 +134,24 @@ if st.session_state['valid_session']:
         case '🕵️ Unit Comp Query':
             st.info("This is the status of a unit\'s comps for a specific week.")
 
-            cdf = smartsheet_to_dataframe(st.secrets['smartsheet']['sheets']['comps'])
-            ddf = smartsheet_to_dataframe(st.secrets['smartsheet']['sheets']['dates'])
-
+            cdf          = smartsheet_to_dataframe(st.secrets['smartsheet']['sheets']['comps'])
+            ddf          = smartsheet_to_dataframe(st.secrets['smartsheet']['sheets']['dates'])
             ddf['Start'] = pd.to_datetime(ddf['Start']).dt.date.astype(str)
             ddf['End']   = pd.to_datetime(ddf['End']).dt.date.astype(str)
-            ddf['Week'] = ddf['Start'] + ' - ' + ddf['End']
-            cdf  = cdf.sort_values(by='Unit_Code').reset_index(drop=True)
-            cdf  = cdf['Unit_Code'].drop_duplicates().to_list()
-            ddf  = ddf.sort_values(by='Start').reset_index(drop=True)
-            ddf  = ddf['Week'].to_list()
-            unit = l.selectbox(label='Unit', options=cdf)
-            week = r.selectbox(label='Week', options=ddf)
+            ddf['Week']  = ddf['Start'] + ' - ' + ddf['End']
+            cdf          = cdf.sort_values(by='Unit_Code').reset_index(drop=True)
+            cdf          = cdf['Unit_Code'].drop_duplicates().to_list()
+            ddf          = ddf.sort_values(by='Start').reset_index(drop=True)
+            ddf          = ddf['Week'].to_list()
+            unit         = l.selectbox(label='Unit', options=cdf)
+            week         = r.selectbox(label='Week', options=ddf)
 
         case _:
             st.info('Coming soon!')
+
+
+
+
 
     if st.button('Pull Report', use_container_width=True, type='primary'):
 
@@ -177,6 +181,7 @@ if st.session_state['valid_session']:
                     df['Misses'] = df['Season'].str.len()
                     df           = df.sort_values(by='Misses', ascending=False)
                     st.dataframe(data=df, hide_index=True, use_container_width=True)
+
 
             case '🏘️ Comp Summary':
                 if date_range is not None:
@@ -274,6 +279,7 @@ if st.session_state['valid_session']:
                 
                 results = pd.DataFrame(results, columns=['As_of_Date','Comp','Availability_Status','Last_Available_Date','Cost_to_Guest'])
                 st.dataframe(data=results, use_container_width=True, hide_index=True)
+
 
             case _:
                 '**Coming soon!**'
