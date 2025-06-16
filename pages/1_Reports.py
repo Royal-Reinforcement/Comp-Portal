@@ -99,7 +99,6 @@ if st.session_state['valid_session']:
     l, r = st.columns(2)
 
     reports = [
-        'Detail',
         '❗️ Comp Review',
         '🏘️ Comp Summary',
         '🏠 Unit Summary',
@@ -111,10 +110,6 @@ if st.session_state['valid_session']:
     
 
     match report:
-        case 'Detail':
-            st.info('This is the raw data that is populated with the comp listings script.')
-            date_range = get_daterange(column=r)
-
 
         case '❗️ Comp Review':
             st.info('This is a list of comps that have returned zeros or undefined on specific comp weeks.')
@@ -162,15 +157,6 @@ if st.session_state['valid_session']:
     if st.button('Pull Report', use_container_width=True, type='primary'):
 
         match report:
-            case 'Detail':
-                if date_range is not None:
-                    query      = collection.where(filter=FieldFilter('Date','in',date_range)).stream()
-                    result     = [item.to_dict() for item in query]
-                    df         = pd.DataFrame(result)
-                    df['Date'] = pd.to_datetime(df['Date']).dt.normalize()
-                    df['Date'] = pd.to_datetime(df['Date']).dt.date
-                    st.dataframe(data=df, hide_index=True, use_container_width=True)
-
 
             case '❗️ Comp Review':
                 if date_range is not None:
