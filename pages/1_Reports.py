@@ -115,22 +115,27 @@ if st.session_state['valid_session']:
             st.info('This is the raw data that is populated with the comp listings script.')
             date_range = get_daterange(column=r)
 
+
         case '❗️ Comp Review':
             st.info('This is a list of comps that have returned zeros or undefined on specific comp weeks.')
             date_range = get_daterange(column=r)
         
+
         case '🏘️ Comp Summary':
             st.info('This is the per-comp, aggregate average of each non-zero-or-undefined value.')
             date_range = get_daterange(column=r)
     
+
         case '🏠 Unit Summary':
             st.info('This is the per-unit, aggregate average of each non-zero-or-undefined comps.')
             date_range = get_daterange(column=r)
         
+
         case '💲 Comp Booking Summary':
             st.info('This is the comparison of a date to the date prior, highlightling proposed bookings and associated rates.')
             date = get_date(column=r)
         
+
         case '🕵️ Unit Comp Query':
             st.info("This is the status of a unit\'s comps for a specific week.")
 
@@ -145,6 +150,7 @@ if st.session_state['valid_session']:
             ddf          = ddf['Week'].to_list()
             unit         = l.selectbox(label='Unit', options=cdf)
             week         = r.selectbox(label='Week', options=ddf)
+
 
         case _:
             st.info('Coming soon!')
