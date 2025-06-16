@@ -244,7 +244,7 @@ if st.session_state['valid_session']:
                     FieldFilter('Cost_to_Guest','!=', 0)
                     ])).stream()
                 
-                result_rwo   = [item.to_dict() for item in query_one]
+                result_rwo   = [item.to_dict() for item in query_two]
                 pdf          = pd.DataFrame(result_rwo)
 
                 df           = pd.merge(sdf, pdf, on=['Unit','Comp','Dates'], how='left', suffixes=('_s','_p'))
